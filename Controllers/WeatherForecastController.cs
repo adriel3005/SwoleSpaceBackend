@@ -1,3 +1,5 @@
+using HealthApplication.Models;
+using HealthApplication.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthApplication.Controllers
@@ -12,22 +14,23 @@ namespace HealthApplication.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IForecastRepository _forecastRepository;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IForecastRepository forecastRepository)
         {
             _logger = logger;
+            _forecastRepository = forecastRepository;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>All forecast DB entries</returns>
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public Task<IEnumerable<WeatherForecast>> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return _forecastRepository.GetWeatherForecasts();
         }
     }
 }
