@@ -32,7 +32,7 @@ namespace HealthApplication.Repositories
         {
             // TODO: set env variables in deployment pipeline
             var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            var databaseUri = new Uri(databaseUrl);
+            var databaseUri = new Uri(databaseUrl, true);
             var userInfo = databaseUri.UserInfo.Split(':');
 
             var builder = new NpgsqlConnectionStringBuilder
