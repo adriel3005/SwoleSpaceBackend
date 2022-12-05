@@ -1,3 +1,4 @@
+using HealthApplication.Attributes;
 using HealthApplication.Repositories;
 using HealthApplication.Services;
 
@@ -14,6 +15,8 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IForecastRepository, ForecastRepository>();
 builder.Services.AddScoped<ISupaAuthService, SupaAuthService>();
+// dependency injection for auth service in attribute
+builder.Services.AddScoped<AuthenticationFilterAttribute>();
 
 var app = builder.Build();
 
