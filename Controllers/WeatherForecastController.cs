@@ -1,3 +1,4 @@
+using HealthApplication.Attributes;
 using HealthApplication.Models;
 using HealthApplication.Repositories;
 using HealthApplication.Services;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Web.Http.Filters;
 
 namespace HealthApplication.Controllers
 {
@@ -33,18 +35,12 @@ namespace HealthApplication.Controllers
         /// 
         /// </summary>
         /// <returns>All forecast DB entries</returns>
+        [ServiceFilter(typeof (AuthenticationFilterAttribute))]
         [HttpGet(Name = "GetWeatherForecast")]
         public async Task<IActionResult> Get([FromHeader] string Authorization)
         {
-            if ( await _authService.VerifyUser(Authorization)) 
-            { 
-                var data =  await _forecastRepository.GetWeatherForecasts();
-
-                return Ok(data);
-            }
-            return Unauthorized();
+            var data = await _forecastRepository.GetWeatherForecasts();
+            return Ok(data);
         }
-
-
     }
 }
