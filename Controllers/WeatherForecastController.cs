@@ -1,6 +1,10 @@
 using HealthApplication.Models;
 using HealthApplication.Repositories;
+using HealthApplication.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http.Headers;
 
 namespace HealthApplication.Controllers
 {
@@ -15,12 +19,14 @@ namespace HealthApplication.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IForecastRepository _forecastRepository;
+        private readonly ISupaAuthService _authService;
 
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IForecastRepository forecastRepository)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IForecastRepository forecastRepository, ISupaAuthService authService)
         {
             _logger = logger;
             _forecastRepository = forecastRepository;
+            _authService = authService;
         }
 
         /// <summary>
@@ -28,9 +34,17 @@ namespace HealthApplication.Controllers
         /// </summary>
         /// <returns>All forecast DB entries</returns>
         [HttpGet(Name = "GetWeatherForecast")]
-        public Task<IEnumerable<WeatherForecast>> Get()
+        public async Task<IActionResult> Get([FromHeader] string Authorization)
         {
-            return _forecastRepository.GetWeatherForecasts();
+            if ( await _authService.VerifyUser(Authorization)) 
+            { 
+                var data =  await _forecastRepository.GetWeatherForecasts();
+
+                return Ok(data);
+            }
+            return Unauthorized();
         }
+
+
     }
 }
