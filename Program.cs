@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IForecastRepository, ForecastRepository>();
+builder.Services.AddScoped<ISupabaseRepository, SupabaseRepository>();
 builder.Services.AddScoped<ISupaAuthService, SupaAuthService>();
 // dependency injection for auth service in attribute
 builder.Services.AddScoped<AuthenticationFilterAttribute>();
