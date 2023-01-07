@@ -2,6 +2,7 @@
 using HealthApplication.Models;
 using Npgsql;
 using Npgsql.Internal.TypeHandlers;
+using System.Data;
 
 namespace HealthApplication.Repositories
 {
@@ -45,19 +46,17 @@ namespace HealthApplication.Repositories
             }
         }
 
-        public async Task< IEnumerable<UserProfile>> GetUser(string id) 
+        public async Task<UserProfile> GetUser(string id) 
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                
                 var parameters = new { Id = Guid.Parse(id) };
+                string sql = "select * from get_user(@user_id)";
 
-                string sql = "select * from public.profiles where id=@Id";
 
-                var result = await connection.QueryAsync<UserProfile>(sql, parameters);
-
+                var result = (await connection.QueryAsync<UserProfile>(sql, new { user_id = Guid.Parse(id) })).FirstOrDefault();
+                
                 return result;
-
             }
         }
 
