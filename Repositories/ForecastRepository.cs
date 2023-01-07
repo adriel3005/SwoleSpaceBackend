@@ -1,6 +1,7 @@
 ﻿using HealthApplication.Models;
 using Dapper;
 using Npgsql;
+using HealthApplication.Utilities;
 
 namespace HealthApplication.Repositories
 {
@@ -9,7 +10,7 @@ namespace HealthApplication.Repositories
         private readonly string _connectionString;
         public ForecastRepository() 
         {
-            _connectionString = GetBuilder();
+            _connectionString = Utility.GetBuilder(Environment.GetEnvironmentVariable("DATABASE_URL"));
         }
 
         public async Task<IEnumerable<WeatherForecast>> GetWeatherForecasts()
@@ -24,27 +25,6 @@ namespace HealthApplication.Repositories
             }
         }
 
-        /// <summary>
-        /// Create connection string for DB connection
-        /// </summary>
-        /// <returns>connection string</returns>
-        public static string GetBuilder()
-        {
-            // TODO: set env variables in deployment pipeline
-            var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            var databaseUri = new Uri(databaseUrl, true);
-            var userInfo = databaseUri.UserInfo.Split(':');
-
-            var builder = new NpgsqlConnectionStringBuilder
-            {
-                Host = databaseUri.Host,
-                Port = databaseUri.Port,
-                Username = userInfo[0],
-                Password = userInfo[1],
-                Database = databaseUri.LocalPath.TrimStart('/')
-            };
-
-            return builder.ToString();
-        }
+        
     }
 }

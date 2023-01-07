@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using HealthApplication.Models;
+using HealthApplication.Utilities;
 using Npgsql;
 using Npgsql.Internal.TypeHandlers;
 using System.Data;
@@ -11,7 +12,7 @@ namespace HealthApplication.Repositories
         private readonly string _connectionString;
         public SupabaseRepository()
         {
-            _connectionString = GetBuilder();
+            _connectionString = Utility.GetBuilder(Environment.GetEnvironmentVariable("DATABASE_URL"));
         }
 
         /// <summary>
@@ -52,31 +53,6 @@ namespace HealthApplication.Repositories
                 
                 return result;
             }
-        }
-
-        // TODO: Methods like GetBuilder are repeated in Repositories. There should be a better way to reference this.
-
-        /// <summary>
-        /// Create connection string for DB connection
-        /// </summary>
-        /// <returns>connection string</returns>
-        public static string GetBuilder()
-        {
-            // TODO: set env variables in deployment pipeline
-            var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
-            var databaseUri = new Uri(databaseUrl, true);
-            var userInfo = databaseUri.UserInfo.Split(':');
-
-            var builder = new NpgsqlConnectionStringBuilder
-            {
-                Host = databaseUri.Host,
-                Port = databaseUri.Port,
-                Username = userInfo[0],
-                Password = userInfo[1],
-                Database = databaseUri.LocalPath.TrimStart('/')
-            };
-
-            return builder.ToString();
         }
     }
 }
