@@ -31,7 +31,7 @@ namespace HealthApplication.Controllers
         [Route("~/GetUser")]
         [ServiceFilter(typeof(AuthenticationFilterAttribute))]
         [HttpGet]
-        public async Task<IActionResult> GetUser(string id)
+        public async Task<IActionResult> GetUser(Guid id)
         {
             var data = await _supabaseRepository.GetUser(id);
             return Ok(data);

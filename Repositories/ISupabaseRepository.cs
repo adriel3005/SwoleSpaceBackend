@@ -6,6 +6,6 @@ namespace HealthApplication.Repositories
     {
         public Task UpsertUser(UserProfile user);
 
-        public Task<UserProfile> GetUser(string id);
+        public Task<UserProfile> GetUser(Guid id);
     }
 }

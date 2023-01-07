@@ -46,15 +46,14 @@ namespace HealthApplication.Repositories
             }
         }
 
-        public async Task<UserProfile> GetUser(string id) 
+        public async Task<UserProfile> GetUser(Guid id) 
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                var parameters = new { Id = Guid.Parse(id) };
                 string sql = "select * from get_user(@user_id)";
 
 
-                var result = (await connection.QueryAsync<UserProfile>(sql, new { user_id = Guid.Parse(id) })).FirstOrDefault();
+                var result = (await connection.QueryAsync<UserProfile>(sql, new { user_id = id })).FirstOrDefault();
                 
                 return result;
             }
