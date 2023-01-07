@@ -8,22 +8,24 @@ namespace HealthApplication.Repositories
 {
     public class SupabaseRepository : ISupabaseRepository
     {
-        // TODO: add similar setup to Forecast Repository.
-
-        // Also TODO: Have SupabaseController referencing this Repository
-
         private readonly string _connectionString;
         public SupabaseRepository()
         {
             _connectionString = GetBuilder();
         }
 
-        public async Task UpsertUser(UserProfile user)
+        /// <summary>
+        /// Updates user if user exists
+        /// </summary>
+        /// <param name="user"></param>
+        /// <see cref="https://www.postgresql.org/docs/current/sql-createfunction.html"/>
+        /// <returns>whether user was succesfully updated</returns>
+        public async Task<bool> UpdateUser(UserProfile user)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-
-                var parameters = new {
+                var parameters = new
+                {
                     Id = user.id,
                     Username = user.username,
                     FullName = user.full_name,
@@ -31,18 +33,11 @@ namespace HealthApplication.Repositories
                     Website = user.website
                 };
 
-                // TODO: replace with stored procedure that does insert
+                string sql = "select * from update_user(@Id, @Username, @FullName, @AvatarUrl, @Website)";
 
-                // Supabase Upsert equivalent
-                string sql = "insert into public.profiles(id, username, full_name, avatar_url, website) " +
-                    "values(@Id, @Username, @FullName, @AvatarUrl, @Website) " +
-                    "ON CONFLICT (id) DO UPDATE SET " +
-                    "username = EXCLUDED.username, " +
-                    "full_name = EXCLUDED.full_name, " +
-                    "avatar_url = EXCLUDED.avatar_url, " +
-                    "website = EXCLUDED.website ";
+                var result = (await connection.QueryAsync<bool>(sql, parameters)).FirstOrDefault();
 
-                var results = await connection.ExecuteAsync(sql, parameters);
+                return result;
             }
         }
 

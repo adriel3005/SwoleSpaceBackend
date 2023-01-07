@@ -24,8 +24,7 @@ namespace HealthApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> PostUpdateUser(UserProfile userProfile)
         {
-            await _supabaseRepository.UpsertUser(userProfile);
-            return Ok();
+            return await _supabaseRepository.UpdateUser(userProfile) ? Ok() : NotFound();
         }
 
         [Route("~/GetUser")]
