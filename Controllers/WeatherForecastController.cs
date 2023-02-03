@@ -1,4 +1,12 @@
+using HealthApplication.Attributes;
+using HealthApplication.Models;
+using HealthApplication.Repositories;
+using HealthApplication.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Web.Http.Filters;
 
 namespace HealthApplication.Controllers
 {
@@ -12,22 +20,27 @@ namespace HealthApplication.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IForecastRepository _forecastRepository;
+        private readonly ISupaAuthService _authService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IForecastRepository forecastRepository, ISupaAuthService authService)
         {
             _logger = logger;
+            _forecastRepository = forecastRepository;
+            _authService = authService;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>All forecast DB entries</returns>
+        [ServiceFilter(typeof (AuthenticationFilterAttribute))]
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IActionResult> Get([FromHeader] string Authorization)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var data = await _forecastRepository.GetWeatherForecasts();
+            return Ok(data);
         }
     }
 }

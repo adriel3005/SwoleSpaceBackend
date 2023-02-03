@@ -1,3 +1,7 @@
+using HealthApplication.Attributes;
+using HealthApplication.Repositories;
+using HealthApplication.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +11,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<IForecastRepository, ForecastRepository>();
+builder.Services.AddScoped<ISupabaseRepository, SupabaseRepository>();
+builder.Services.AddScoped<ISupaAuthService, SupaAuthService>();
+// dependency injection for auth service in attribute
+builder.Services.AddScoped<AuthenticationFilterAttribute>();
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
