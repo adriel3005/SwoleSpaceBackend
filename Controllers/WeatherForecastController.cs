@@ -35,9 +35,9 @@ namespace HealthApplication.Controllers
         /// 
         /// </summary>
         /// <returns>All forecast DB entries</returns>
-        [ServiceFilter(typeof (AuthenticationFilterAttribute))]
+        //[ServiceFilter(typeof (AuthenticationFilterAttribute))]
         [HttpGet(Name = "GetWeatherForecast")]
-        public async Task<IActionResult> Get([FromHeader] string Authorization)
+        public async Task<IActionResult> Get(/*[FromHeader] string Authorization*/)
         {
             var data = await _forecastRepository.GetWeatherForecasts();
             return Ok(data);
