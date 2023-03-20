@@ -11,8 +11,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://swolespace.onrender.com").AllowAnyHeader()
-                                                  .AllowAnyMethod();
+                          policy.WithOrigins("https://swolespace.onrender.com", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
                       });
 });
 
@@ -41,13 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// Add Cors Policy to only allow from 
 app.UseCors(MyAllowSpecificOrigins);
 
-/*app.UseCors(builder => builder
-       .AllowAnyHeader()
-       .AllowAnyMethod()
-       .AllowAnyOrigin()
-    );*/
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
