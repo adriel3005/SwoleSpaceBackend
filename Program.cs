@@ -11,7 +11,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.AllowAnyOrigin().AllowAnyHeader()
+                          policy.WithOrigins("https://swolespace.onrender.com").AllowAnyHeader()
                                                   .AllowAnyMethod();
                       });
 });
