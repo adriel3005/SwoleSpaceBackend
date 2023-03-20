@@ -6,15 +6,15 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://swolespace.onrender.com/").AllowAnyHeader()
+                          policy.WithOrigins("https://swolespace.onrender.com/", "swolespace.onrender.com/", "https://www.swolespace.onrender.com/").AllowAnyHeader()
                                                   .AllowAnyMethod();
                       });
-});
+});*/
 
 // Add services to the container.
 
@@ -41,10 +41,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//app.UseCors(MyAllowSpecificOrigins);
 
+app.UseCors(builder => builder
+       .AllowAnyHeader()
+       .AllowAnyMethod()
+       .AllowAnyOrigin()
+    );
 app.UseHttpsRedirection();
-
-app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
