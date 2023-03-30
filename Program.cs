@@ -2,7 +2,18 @@ using HealthApplication.Attributes;
 using HealthApplication.Repositories;
 using HealthApplication.Services;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("https://swolespace.onrender.com", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod();
+                      });
+});
 
 // Add services to the container.
 
@@ -29,6 +40,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// Add Cors Policy to only allow from 
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
