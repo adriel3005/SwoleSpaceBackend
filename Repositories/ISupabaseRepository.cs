@@ -7,5 +7,7 @@ namespace HealthApplication.Repositories
         public Task<bool> UpdateUser(UserProfile user);
 
         public Task<UserProfile> GetUser(Guid id);
+
+        public Task<IEnumerable<ExerciseModel>> GetExercises();
     }
 }

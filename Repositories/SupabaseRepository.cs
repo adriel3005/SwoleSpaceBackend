@@ -4,6 +4,7 @@ using HealthApplication.Utilities;
 using Npgsql;
 using Npgsql.Internal.TypeHandlers;
 using System.Data;
+using System.Net.WebSockets;
 
 namespace HealthApplication.Repositories
 {
@@ -51,6 +52,22 @@ namespace HealthApplication.Repositories
 
                 var result = (await connection.QueryAsync<UserProfile>(sql, new { user_id = id })).FirstOrDefault();
                 
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Returns all Exercises
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ExerciseModel>> GetExercises()
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                string sql = "select * from get_exercises()";
+                var result = await connection.QueryAsync<ExerciseModel>(sql);
+
                 return result;
             }
         }
