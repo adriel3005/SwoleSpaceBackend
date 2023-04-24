@@ -43,6 +43,25 @@ namespace HealthApplication.Repositories
             }
         }
 
+        public async Task AddRoutineExercise(RoutineExerciseModel re)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                var parameters = new
+                {
+                    Rei = re.routine_exercise_id,
+                    Ei = re.exercise_id,
+                    Repetition = re.repetition,
+                    Sets = re.sets
+                };
+                string sql = "select * from insert_routine_exercise(@Rei, @Ei, @Repetition, @Sets)";
+
+                // TODO: We need to have a method of verifying if the data was correctly inserted. Otherwise we may be missing user
+                // routines.
+                var result = (await connection.QueryAsync(sql, parameters));
+            }
+        }
+
         public async Task<UserProfile> GetUser(Guid id) 
         {
             using (var connection = new NpgsqlConnection(_connectionString))
