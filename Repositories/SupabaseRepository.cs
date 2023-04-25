@@ -63,6 +63,27 @@ namespace HealthApplication.Repositories
             }
         }
 
+        /// <summary>
+        /// Adds user routine to DB. This can be used to reference associated Routine Exercises
+        /// </summary>
+        /// <param name="ur"></param>
+        /// <returns></returns>
+        public async Task AddUserRoutine(UserRoutineModel ur)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                var parameters = new
+                {
+                    UrID = ur.user_routine_id,
+                    uID = ur.user_id,
+                };
+                string sql = "select * from insert_user_routine(@UrID, @uID)";
+
+                // TODO: We need to have a method of verifying if the data was correctly inserted. Otherwise we may be missing user
+                // routines.
+                var result = (await connection.QueryAsync(sql, parameters));
+            }
+        }
         public async Task<UserProfile> GetUser(Guid id) 
         {
             using (var connection = new NpgsqlConnection(_connectionString))
