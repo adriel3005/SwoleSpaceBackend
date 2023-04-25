@@ -52,9 +52,10 @@ namespace HealthApplication.Repositories
                     Rei = re.routine_exercise_id,
                     Ei = re.exercise_id,
                     Repetition = re.repetition,
-                    Sets = re.sets
+                    Sets = re.sets,
+                    UserID = re.user_id
                 };
-                string sql = "select * from insert_routine_exercise(@Rei, @Ei, @Repetition, @Sets)";
+                string sql = "select * from insert_routine_exercise(@Rei, @Ei, @Repetition, @Sets, @UserID)";
 
                 // TODO: We need to have a method of verifying if the data was correctly inserted. Otherwise we may be missing user
                 // routines.

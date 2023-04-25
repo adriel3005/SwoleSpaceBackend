@@ -7,5 +7,6 @@
         public int repetition { get; set; }
         public int sets { get; set; }
         public DateTime? created_at { get; set; }
+        public Guid user_id { get; set; }
     }
 }
