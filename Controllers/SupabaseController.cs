@@ -44,6 +44,23 @@ namespace HealthApplication.Controllers
             return Ok();
         }
 
+        [Route("~/AddUserRoutine")]
+        [ServiceFilter(typeof(AuthenticationFilterAttribute))]
+        [HttpPost]
+        public async Task<IActionResult> AddUserRoutine(UserRoutineModel routineExercise)
+        {
+            try
+            {
+                await _supabaseRepository.AddUserRoutine(routineExercise);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return Ok();
+        }
+
         [Route("~/GetExercises")]
         [ServiceFilter(typeof(AuthenticationFilterAttribute))]
         [HttpGet]
