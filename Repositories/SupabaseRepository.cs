@@ -50,12 +50,14 @@ namespace HealthApplication.Repositories
                 var parameters = new
                 {
                     Rei = re.routine_exercise_id,
+                    UrID = re.user_routine_id,
                     Ei = re.exercise_id,
                     Repetition = re.repetition,
                     Sets = re.sets,
-                    UserID = re.user_id
+                    UserID = re.user_id,
+                    Eo = re.exercise_order
                 };
-                string sql = "select * from insert_routine_exercise(@Rei, @Ei, @Repetition, @Sets, @UserID)";
+                string sql = "select * from insert_routine_exercise(@Rei, @UrID, @Ei, @Repetition, @Sets, @UserID, @Eo)";
 
                 // TODO: We need to have a method of verifying if the data was correctly inserted. Otherwise we may be missing user
                 // routines.
