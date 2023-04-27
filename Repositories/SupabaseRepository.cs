@@ -78,8 +78,10 @@ namespace HealthApplication.Repositories
                 {
                     UrID = ur.user_routine_id,
                     uID = ur.user_id,
+                    rName = ur.routine_name,
+                    rDescription = ur.routine_description
                 };
-                string sql = "select * from insert_user_routine(@UrID, @uID)";
+                string sql = "select * from insert_user_routine(@UrID, @uID, @rName, @rDescription)";
 
                 // TODO: We need to have a method of verifying if the data was correctly inserted. Otherwise we may be missing user
                 // routines.
