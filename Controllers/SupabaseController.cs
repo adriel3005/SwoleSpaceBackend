@@ -64,7 +64,7 @@ namespace HealthApplication.Controllers
         [Route("~/GetUserRoutines")]
         [ServiceFilter(typeof(AuthenticationFilterAttribute))]
         [HttpGet]
-        public async Task<IActionResult> AddUserRoutine([FromQuery] Guid userID)
+        public async Task<IActionResult> GetUserRoutine([FromQuery] Guid userID)
         {
             try
             {
