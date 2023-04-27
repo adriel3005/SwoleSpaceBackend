@@ -86,6 +86,20 @@ namespace HealthApplication.Repositories
                 var result = (await connection.QueryAsync(sql, parameters));
             }
         }
+
+        public async Task<IEnumerable<UserRoutineModel>> GetUserRoutines(Guid id)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                var parameters = new
+                {
+                    uID = id,
+                };
+                string sql = "select * from get_user_routines(@uID)";
+
+                return await connection.QueryAsync<UserRoutineModel>(sql, parameters);
+            }
+        }
         public async Task<UserProfile> GetUser(Guid id) 
         {
             using (var connection = new NpgsqlConnection(_connectionString))
