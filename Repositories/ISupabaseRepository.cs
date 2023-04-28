@@ -6,6 +6,7 @@ namespace HealthApplication.Repositories
     {
         public Task<bool> UpdateUser(UserProfile user);
         public Task AddRoutineExercise(RoutineExerciseModel re);
+        public Task<IEnumerable<RoutineExerciseModel>> GetRoutineExercises(Guid reID);
 
         public Task AddUserRoutine(UserRoutineModel ur);
 

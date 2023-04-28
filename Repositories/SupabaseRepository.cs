@@ -64,6 +64,20 @@ namespace HealthApplication.Repositories
                 var result = (await connection.QueryAsync(sql, parameters));
             }
         }
+        public async Task<IEnumerable<RoutineExerciseModel>> GetRoutineExercises(Guid urID)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                var parameters = new
+                {
+                    ur_ID = urID,
+                };
+                string sql = "select * from get_routine_exercises(@ur_ID)";
+
+
+                return await connection.QueryAsync<RoutineExerciseModel>(sql, parameters);
+            }
+        }
 
         /// <summary>
         /// Adds user routine to DB. This can be used to reference associated Routine Exercises
