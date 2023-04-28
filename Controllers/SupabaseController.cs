@@ -44,6 +44,23 @@ namespace HealthApplication.Controllers
             return Ok();
         }
 
+        [Route("~/GetRoutineExercises")]
+        [ServiceFilter(typeof(AuthenticationFilterAttribute))]
+        [HttpGet]
+        public async Task<IActionResult> GetRoutineExercises([FromQuery] Guid u_routine_id)
+        {
+            try
+            {
+                var data = await _supabaseRepository.GetRoutineExercises(u_routine_id);
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
         [Route("~/AddUserRoutine")]
         [ServiceFilter(typeof(AuthenticationFilterAttribute))]
         [HttpPost]
@@ -64,7 +81,7 @@ namespace HealthApplication.Controllers
         [Route("~/GetUserRoutines")]
         [ServiceFilter(typeof(AuthenticationFilterAttribute))]
         [HttpGet]
-        public async Task<IActionResult> AddUserRoutine([FromQuery] Guid userID)
+        public async Task<IActionResult> GetUserRoutine([FromQuery] Guid userID)
         {
             try
             {
